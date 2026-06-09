@@ -434,7 +434,6 @@
                                 <th>最近阅读</th>
                                 <th>累计时长</th>
                                 <th>在读书籍</th>
-                                <th>有读后感</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -450,7 +449,6 @@
                                 <td>今天 14:32</td>
                                 <td>286 分钟</td>
                                 <td>《四世同堂》68%</td>
-                                <td><div class="checkbox-custom checked"><i class="fas fa-check"></i></div></td>
                                 <td>
                                     <button onclick="switchNav('page-student-detail', document.querySelectorAll('.sidebar-item')[1])" class="text-brand text-sm hover:underline">查看详情</button>
                                 </td>
@@ -466,7 +464,6 @@
                                 <td>昨天 20:15</td>
                                 <td>198 分钟</td>
                                 <td>《小王子》35%</td>
-                                <td><div class="checkbox-custom"><i class="fas fa-check"></i></div></td>
                                 <td>
                                     <button onclick="switchNav('page-student-detail', document.querySelectorAll('.sidebar-item')[1])" class="text-brand text-sm hover:underline">查看详情</button>
                                 </td>
@@ -482,7 +479,6 @@
                                 <td>3天前</td>
                                 <td>342 分钟</td>
                                 <td>《草房子》已读完</td>
-                                <td><div class="checkbox-custom checked"><i class="fas fa-check"></i></div></td>
                                 <td>
                                     <button onclick="switchNav('page-student-detail', document.querySelectorAll('.sidebar-item')[1])" class="text-brand text-sm hover:underline">查看详情</button>
                                 </td>
@@ -498,7 +494,6 @@
                                 <td>今天 09:10</td>
                                 <td>156 分钟</td>
                                 <td>《中国国家博物馆...》12%</td>
-                                <td><div class="checkbox-custom"><i class="fas fa-check"></i></div></td>
                                 <td>
                                     <button onclick="switchNav('page-student-detail', document.querySelectorAll('.sidebar-item')[1])" class="text-brand text-sm hover:underline">查看详情</button>
                                 </td>
@@ -536,9 +531,15 @@
                     </div>
                 </div>
                 <!-- 按书籍展示阅读进度和读后感 -->
-                <div class="space-y-4">
-                    <!-- 书籍1：四世同堂 -->
-                    <div class="stat-card">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="flex items-center gap-2 cursor-pointer" onclick="toggleFilterReview(this)">
+                        <div class="checkbox-custom" id="filter-review-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="text-sm text-slate-600">只显示有读后感的书籍</span>
+                    </div>
+                </div>
+                <div class="space-y-4" id="books-list">
+                    <!-- 书籍1：四世同堂（有读后感） -->
+                    <div class="stat-card book-item" data-has-review="true">
                         <div class="flex items-center gap-4 mb-4">
                             <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=120&h=160&fit=crop" class="w-14 h-20 rounded object-cover">
                             <div class="flex-1">
@@ -562,8 +563,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 书籍2：Oliver Twist -->
-                    <div class="stat-card">
+                    <!-- 书籍2：Oliver Twist（无读后感） -->
+                    <div class="stat-card book-item" data-has-review="false">
                         <div class="flex items-center gap-4 mb-4">
                             <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=120&h=160&fit=crop" class="w-14 h-20 rounded object-cover">
                             <div class="flex-1">
@@ -581,8 +582,8 @@
                             <p class="text-sm text-slate-400 italic">暂无提交的读后感</p>
                         </div>
                     </div>
-                    <!-- 书籍3：中国国家博物馆儿童历史百科绘本 -->
-                    <div class="stat-card">
+                    <!-- 书籍3：中国国家博物馆儿童历史百科绘本（无读后感） -->
+                    <div class="stat-card book-item" data-has-review="false">
                         <div class="flex items-center gap-4 mb-4">
                             <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=120&h=160&fit=crop" class="w-14 h-20 rounded object-cover">
                             <div class="flex-1">
@@ -1053,8 +1054,8 @@
             <!-- ========== 批改读后感页 ========== -->
             <div class="page" id="page-review">
                 <div class="flex items-center gap-3 mb-6">
-                    <button onclick="switchNav('page-home', document.querySelectorAll('.sidebar-item')[0])" class="btn-secondary btn-press">
-                        <i class="fas fa-arrow-left"></i> 返回首页
+                    <button onclick="goBack()" class="btn-secondary btn-press">
+                        <i class="fas fa-arrow-left"></i> 返回
                     </button>
                     <h1 class="text-2xl font-bold text-slate-800">批改读后感</h1>
                     <span class="text-sm text-slate-400">第 1 / 8 条</span>
@@ -1217,6 +1218,7 @@
 
     <script>
         let currentStep = 1;
+        let pageHistory = [];
 
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1227,6 +1229,11 @@
         }
 
         function switchNav(pageId, el) {
+            // 记录当前页面到历史（排除登录页和重复页面）
+            const currentActive = document.querySelector('#page-layout .page.active');
+            if (currentActive && currentActive.id !== 'page-login' && currentActive.id !== pageId) {
+                pageHistory.push(currentActive.id);
+            }
             document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
             if (el) el.classList.add('active');
             document.querySelectorAll('#page-layout .page').forEach(p => p.classList.remove('active'));
@@ -1243,6 +1250,44 @@
                 'page-profile': '个人中心'
             };
             document.getElementById('page-title').textContent = titles[pageId] || '首页';
+        }
+
+        function goBack() {
+            const prevPage = pageHistory.pop();
+            if (prevPage) {
+                // 根据页面ID找到对应的侧边栏项
+                const sidebarMap = {
+                    'page-home': 0,
+                    'page-classes': 1,
+                    'page-students': 1,
+                    'page-student-detail': 1,
+                    'page-tasks': 2,
+                    'page-task-detail': 2,
+                    'page-new-task': 2,
+                    'page-review': 0,
+                    'page-profile': 3
+                };
+                const sidebarIdx = sidebarMap[prevPage] || 0;
+                const sidebarItems = document.querySelectorAll('.sidebar-item');
+                switchNav(prevPage, sidebarItems[sidebarIdx]);
+            } else {
+                switchNav('page-home', document.querySelectorAll('.sidebar-item')[0]);
+            }
+        }
+
+        function toggleFilterReview(el) {
+            const checkbox = el.querySelector('.checkbox-custom');
+            checkbox.classList.toggle('checked');
+            const isChecked = checkbox.classList.contains('checked');
+            const books = document.querySelectorAll('.book-item');
+            books.forEach(book => {
+                const hasReview = book.getAttribute('data-has-review') === 'true';
+                if (isChecked && !hasReview) {
+                    book.style.display = 'none';
+                } else {
+                    book.style.display = 'block';
+                }
+            });
         }
 
         function openModal(id) {
