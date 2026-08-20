@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英语周报双语阅读器 - 教师端</title>
+    <title>英语周报双语阅读本 - 教师端</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -69,6 +69,7 @@
         .form-group { margin-bottom: 16px; }
         .toast { position: fixed; top: 20px; right: 20px; background: #1E293B; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; z-index: 100; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; }
         .toast.show { opacity: 1; transform: translateY(0); }
+        #register-success-banner.show { opacity: 1; pointer-events: auto; }
         .book-card-select { border: 2px solid #E2E8F0; border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.15s; }
         .book-card-select:hover { border-color: #CBD5E1; }
         .book-card-select.selected { border-color: #2563EB; background: #EFF6FF; }
@@ -82,13 +83,14 @@
 
     <!-- ========== 登录页 ========== -->
     <div class="page active" id="page-login">
-        <div class="min-h-screen flex items-center justify-center bg-slate-50">
+        <div class="min-h-screen flex items-center justify-center bg-slate-50 relative">
+            <div id="register-success-banner" class="fixed top-4 left-1/2 -translate-x-1/2 bg-success text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium opacity-0 pointer-events-none transition-opacity duration-300 z-50">注册成功</div>
             <div class="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
                 <div class="flex flex-col items-center mb-8">
                     <div class="w-16 h-16 bg-brand rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-brand/20">
                         <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
                     </div>
-                    <h1 class="text-2xl font-bold text-slate-800">英语周报双语阅读器</h1>
+                    <h1 class="text-2xl font-bold text-slate-800"><img src="data:image/png;base64,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" alt="英语周报" style="height:28px;vertical-align:middle;display:inline-block;margin-right:4px;">双语阅读本</h1>
                     <p class="text-sm text-slate-400 mt-1">教师端</p>
                 </div>
                 <div class="space-y-4">
@@ -105,6 +107,162 @@
                     </div>
                     <button onclick="showToast('登录成功');switchPage('page-home')" class="btn-primary w-full justify-center py-3 mt-2">登录</button>
                     <p class="text-xs text-slate-400 text-center mt-4">登录即表示同意《用户协议》和《隐私政策》</p>
+                    <p class="text-center mt-3">
+                        <button onclick="switchPage('page-register-step1')" class="text-sm text-brand font-medium hover:underline">立即注册教师账号</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 注册 Step 1：手机号验证 ========== -->
+    <div class="page" id="page-register-step1">
+        <div class="min-h-screen flex items-center justify-center bg-slate-50">
+            <div class="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
+                <div class="flex flex-col items-center mb-8">
+                    <div class="w-16 h-16 bg-brand rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-brand/20">
+                        <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-slate-800">注册账号</h1>
+                    <p class="text-sm text-slate-400 mt-1">教师端</p>
+                    <div class="step-bar mt-4">
+                        <div class="step-item">
+                            <span class="w-7 h-7 rounded-full bg-brand text-white text-xs flex items-center justify-center font-medium">1</span>
+                            <span class="text-sm font-medium text-brand">验证手机号</span>
+                        </div>
+                        <span class="text-slate-300">—</span>
+                        <div class="step-item">
+                            <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-400 text-xs flex items-center justify-center font-medium">2</span>
+                            <span class="text-sm text-slate-400">填写信息</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="form-label">手机号</label>
+                        <input type="tel" id="reg-phone" placeholder="请输入手机号" class="form-input" value="">
+                    </div>
+                    <div>
+                        <label class="form-label">验证码</label>
+                        <div class="flex gap-3">
+                            <input type="text" id="reg-code" placeholder="请输入验证码" class="form-input" value="">
+                            <button class="btn-secondary whitespace-nowrap" onclick="showToast('验证码已发送')">获取验证码</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 mt-2">
+                        <button onclick="switchPage('page-login')" class="btn-secondary flex-1 justify-center py-3">取消</button>
+                        <button onclick="handleRegisterStep1()" class="btn-primary flex-1 justify-center py-3">下一步</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 注册 Step 2：填写账号信息 ========== -->
+    <div class="page" id="page-register-step2">
+        <div class="min-h-screen flex items-center justify-center bg-slate-50">
+            <div class="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
+                <div class="flex flex-col items-center mb-8">
+                    <div class="w-16 h-16 bg-brand rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-brand/20">
+                        <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-slate-800">填写信息</h1>
+                    <p class="text-sm text-slate-400 mt-1">教师端</p>
+                    <div class="step-bar mt-4">
+                        <div class="step-item">
+                            <span class="w-7 h-7 rounded-full bg-brand text-white text-xs flex items-center justify-center font-medium"><i class="fas fa-check text-[10px]"></i></span>
+                            <span class="text-sm text-slate-400">验证手机号</span>
+                        </div>
+                        <span class="text-slate-300">—</span>
+                        <div class="step-item">
+                            <span class="w-7 h-7 rounded-full bg-brand text-white text-xs flex items-center justify-center font-medium">2</span>
+                            <span class="text-sm font-medium text-brand">填写信息</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="form-label">密码 <span class="text-danger">*</span></label>
+                        <input type="password" id="reg-pwd" placeholder="请设置密码" class="form-input" value="">
+                    </div>
+                    <div>
+                        <label class="form-label">确认密码 <span class="text-danger">*</span></label>
+                        <input type="password" id="reg-pwd2" placeholder="请再次输入密码" class="form-input" value="">
+                    </div>
+                    <div>
+                        <label class="form-label">任职学校</label>
+                        <input type="text" id="reg-school" placeholder="请输入任职学校（选填）" class="form-input" value="">
+                    </div>
+                    <div>
+                        <label class="form-label">学科</label>
+                        <input type="text" id="reg-subject" placeholder="请输入任教学科（选填）" class="form-input" value="">
+                    </div>
+                    <div>
+                        <label class="form-label">任教年级（可多选）</label>
+                        <div class="grid grid-cols-3 gap-2 mt-1">
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="学龄前">
+                                <span class="text-sm text-slate-600">学龄前</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="小学1年级">
+                                <span class="text-sm text-slate-600">小学1年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="小学2年级">
+                                <span class="text-sm text-slate-600">小学2年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="小学3年级">
+                                <span class="text-sm text-slate-600">小学3年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="小学4年级">
+                                <span class="text-sm text-slate-600">小学4年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="小学5年级">
+                                <span class="text-sm text-slate-600">小学5年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="小学6年级">
+                                <span class="text-sm text-slate-600">小学6年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="初中1年级">
+                                <span class="text-sm text-slate-600">初中1年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="初中2年级">
+                                <span class="text-sm text-slate-600">初中2年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="初中3年级">
+                                <span class="text-sm text-slate-600">初中3年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="高中1年级">
+                                <span class="text-sm text-slate-600">高中1年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="高中2年级">
+                                <span class="text-sm text-slate-600">高中2年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="高中3年级">
+                                <span class="text-sm text-slate-600">高中3年级</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                                <input type="checkbox" class="reg-grade" value="高等教育阶段">
+                                <span class="text-sm text-slate-600">高等教育阶段</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 mt-2">
+                        <button onclick="switchPage('page-login')" class="btn-secondary flex-1 justify-center py-3">取消</button>
+                        <button onclick="switchPage('page-register-step1')" class="btn-secondary flex-1 justify-center py-3">上一步</button>
+                        <button onclick="handleRegisterStep2()" class="btn-primary flex-1 justify-center py-3">完成注册</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,12 +273,10 @@
         <!-- 侧边栏 -->
         <aside class="fixed left-0 top-0 bottom-0 w-56 bg-white border-r border-slate-200 z-40 flex flex-col">
             <div class="p-5 border-b border-slate-100">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-brand rounded-lg flex items-center justify-center">
-                        <i class="fas fa-book-open text-white text-sm"></i>
-                    </div>
+                <div class="flex items-start gap-2">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQIAAABiCAYAAAC7zN2+AAAAAXNSR0IArs4c6QAAAARzQklUCAgICHwIZIgAACAASURBVHic7V1Bdts40q6CvB/1cmbTzAkahL1v5QRxTmD5BLFPYPsEdk5g5QRxTmBmn1DICcJezbL17y3Uv1BBhkCAJChKdnr0vdevYwoEQRIsFKq+qhrBAQccsDdIKbN///vff//nP//567///a9+6fFYiJcewAEH/C9BCDEFACCiWyll9rKjecYvJQiUUhdKqYuXHscBBwyA8Wg0ki89CItfRhAopa6J6JaIbpVS05cezwEH9MS/7D+I6J8rCKSUkzzP/1ZKXQ/ZLxF9cP59NWTfBxywR4ztP4joz5cciIvBBQEiXgHAmIjOhupTSjkB5wECQHbQCg74B2AipRy3N9s9BhUE/MFO+M/BPlYWLhs4aAUH/BNwdHT0KrYHR0N2JoR4R0TuoXcAMNumT0+4uMi26feAXwtSyvHR0ZE0xmSw0g7HAFAJIaqnpyettV687Ah/bQwqCIho4v29tbQLaQOMYtu+D3jdkFKOhRCnbB+Sy+Wy1ma5XAIiQp7nBRHdaK2LvQ/0H4DBtga81/E//ExK2VsYSClPIawNABHd9O33gNeP4+PjU0ScE9E91OdVCBNEfFRK3e96bP9EDKkRBF+WEOIMAHoxqBDxNvJTcZD8/1wopa6NMa4muAAAjYhf+d8LAPiDiKawaUQGIpoqpaAsy/O9DXgL8FbnxTGYIBBCSM8+AAAARHQKAJep/SmlpkSUhX57KW1ASjlGxDms7BMVIn4yxhyE0kCQUmaI+Oi89wIRP5VlOYu0vwGAU0Tc0AJYGHyNnXdAHUN6Df6IHM/6uEgavAIv9uF5BqmMiK4Q8THP80el1MUuXUEnJyevxtXUhJOTk0mf86SUU0T8Cc9C9nw+n79t+pi11gut9QwRawvDL+RVehXvdDBBEFu9AdJdJOx2DPb30rYBInoLAJV3eEJEt4j4M8/zR/Z0DAKl1HWe5z+Xy+UjIv6d5/n8NXHUXUgpx8vlMnmPzkLgHp4FwJuU1bwsy2tE9Nu/Sq5JwID+zxIE0ODOI6Kkm41Jc0R8eGk1XGtdRYQBwOqlro1W26zgUkqZ5/lPfhaZ+5MQ4lWudhxQk+TG4+3ALSLepQoAF8aYkFbwqgJ7GJn7BxGdvYYx7iXWABE7T44GbWBhjEm2NewCLcIAAFb7VCFELwu2UurasUUE++7T7x7wByIWKSewJqDLstzq3Wqtq4BWMEbEx9eypeKAOX8sGSK+uJa3F0Hw9PTUWRDEqMmI+FFrXQ02qC3BwiBHxIdYGyI6PT4+Pk3pV0o57bC/rVL63AeklGMiOjXGfEk4R8LK1jKIhR8RQ9fOhBAvHrEqpZREFPOCjYUQHyK/7QWDEooaUHVp1MAiXBhj7uwfx8fHp95ea2GMme2bXcbXe8+RkcGPd7lcdh4TeyVik2UNRPyUMMx9QcJqtevsKtZaayllPtR7+/79+0Oe50N0NSh4frR96C+qtexDECy6vugYixARZ/P5fAEQ9DHbNrdSyjcvoTWUZXmtlPrdV9kR8XI+nxdd+zk6OpLL5bJ1QrhC8bVACHFGRFXqR23bSykzIcQVC/gFIn41xtz1EBIF1BeTf9Wb7R4nJyeT5XJ532RIfy0YUhBUEN7TVl1ObtAGwKqbTSsvwHq/+bbL9XaAv7y/q7Iskz7Yb9++FXmeVwCrrRCvIpnXrHiNvHrmi/ROvYWI9y5FnYgmiHgmpXybItwRUQeo7r24LH3BAuBquVxOWhs/w58/UTD1+ta5z2pbevVgNoIGg2CnSSuEeNfw2yTP83mHvfNLqlfuqqPZmJgMRLxBxIKFSBX4/dVtC2yYOCJWW3QzCRzLfLJQG5h9WOunL78hBScnJ5M8zx+Xy+UjRBa1CBYpWh4ifmbtM+P/JpbP0tfoOKSxsAod7DI52NA0jf3OAqCNi1AR0fu2a+0Kjs1CE1HSKuaiLMsZEU3yPJ+DN5kQ8e41suUcIb6NphLTJpI4KCkeqqGglJr2FAAAAEBE77tqeex5iF1jgoiPqdcHGFYQ/F/fE9kv3mc1rxDxZjQavZ3P5y9iHwDYDLgiosttVXdE/Aj1D6AIudheg2vMEeKd1VsffM+h40kEsqenpyp0fFecfqXUZw6MmvQ5HxEvu6r0vGC2acVZH61gSBtB0CATM5ScnJxMjDETInrXEK5cIeInTulkrdIWmojeWiPiC8OObSj6c+2eRqPRjZRSslHOXk8CAOR5voCVRtR5Ug0FN3vUNlsDY0yBiKGfxlLKcVfhqrWu9uk5MMbcIGIGiZoLwErIpdiRuhqThRCnAJBknxpEELSo9hOl1C1P3oyPZaHYch9EdG6t7nbVFUJMEFF///496r/fN9jbUexya8IUYwgFdgELBSbP7FUzEkJM7JiWy2VvY2HsA+Z4jrMh3YxDgl2gb4UQ1tjZSUPjbd51yrWenp6qiLD0EYv7iWIojcBfrTdARH0IHRurK0+CAl5ZQhLr7WC7wCATdZt8j0KIWwDYm63EScC52EYA8WIR+zlL7G4BezQcWz4JW/Mv2NuzQMQCEb8sl8sCET/D8/YhuM3rcJ1KKfXAXpAofK9JF2wtCJgEk8p9r3jvl8X2PC8dXNQFfO/3MGBEJO/vJk1tEHEmhPgEALBcLq/c9m2TZEiwlmav3Usb4FiDz03ZrDgOIUXIaui5Z98GLBCu+b8N5Hlu72/hMylPTk4mRDRmjaoz7yaGmL2lCVsJAs4Z4AfFNAIRL+2+KM/zmIXzl4jxZ19u1tdV6IMFy+fY74g4M8bczOfzyh47Pj4eG2MmQ1w/FUKIqV3FETFZECil7OqZNTRbhAKKmoCIiwbtYu84Pj4+NcZYO8r6/UkpJSJ+Xi6XGf8GAABKqbuYxtCW/o+3HMmEs96CgF9iKx3WBRv3CoBmAtGvoA0ope6JaOq+2G3Ak+UWIgFXbC+p2UVeODf+ei8a8d8HYe+1C+OOn2/qCvkDAHzN6EW8K1LKMb9XAIdk1kSOI6KL4+Pjr74djDWwrOl6xphkbQBgC0GQmviBX2gBsFYHY0SRxWvXBvglTiGRCBKCZaE1rOoLtj/UVtyYkTbFyr4N3G3Icrks2tpbGrExZtrxEkWf1Q3iIeJ7BxsRM+D3GMjCFEQoRmU0Gk2MMTsZ5zZbg5QHW5Rlee3wyScQkWx99jf7hCvJiei87wdnt1VWLYxBCHH+/fv3oNrNqrn/HvZCQebIQXvt1hgDTj5ym5Kb4lfQDJsgpTy1wpINhx86GM4rRPwYilHpoP1VfQ222wgCDR19p/aF8sSdNvWZ6lLZJ3g7dAWw1nB6uTCZhOKrrhXUheOiyU1KRD4tuyKivXDqXbchdIgnQcQPEF48KkQsAvOi0loXbDwdQ4JXQghRBdzTv3c5dyj4Wm+TEdc1/n779q2ItWvj22yjnW6zNXjPN5rxoSzUzo3Aa5FoL0oRbgPnCbgFWBNBrvv2FVILiegtJyPZIE3F+mChNPH6eB/aQuwCnhCaxNo57d/zQnAGnIkYEbUx5mMo9BoRP7Ex7RH4meR5vkgl4bwErPoPdcFXCSEujTFrg7BrPG/pc00gc4GID8aY822Jdb0FAUvntbVcSimPjo7Gxph3rP4siOi9TwiKdFf5/HxnG3EKXNWGb/pm38QSnpBWCCQTQXwwW1I6f9+xcBh77YL3KaWsuV05VFt77Wx1oAkR/cn9VcaYLwPYYZKYdPxur8FzrUkpJ6HVkojeBbSIMa3SjyXnnthXKLCjNbrjrhDxozHmwRiz9pTx99FJq2R+Qk2jMsb03p666ERTSoXlOrsftrWyB5pvCAGmHp81bCGixrNdwJHuGSLOhsqXL6WcMP9iAquVv2YRZqFz6Z3nplTfaCuE+GKMkQDwp8fkrGEbrYbH7rp+q/l8/qZHP8F7acFiPp//1tKv5H5dFPP5fKch6kyK2rABWJcv//sR+F67agIA6+f0E+oaxmD3tJPEJP5ezrGy+7C5/9Y+5TbjGTznocv3QaV1tj/FkEUzeEUuGgTkOg+DhSXfQODDIaKL5XLZmcHJKvp1wpDX8GtYpOYpdPq5SlypFx05G6EVMuU6SQiRolzOR0DgpXpDgszdFJdtG3aeoajJX8qW1CsimlIaAWTMGXOvBxhiFCzhJ7AKcBrcfsHuv0nk5w1SVQvPoA+2caf5tp4fqR3wvOgsuOyHtYXw34n70NUY+VDBnI/KtvEEXo1Z2AYONPMPb+26drFTQeAJgYoNRnbf35SNN2ZJdrHT9FPORLVbkcHtElrrRZ7nwQlqPS3sZjwbgD1Yweq5WjtBbzetL7yMMUnbtLZMUx4q3ktvuxUcXBD4QiC03WJ7zlrg0SpCtEq5TsTj0CktnJRSjkajjLWV340xn0L2oZ0JAjYCWVfbep/UsAKu3SicsqsxwUJKttxUuGOHlfZxqpT6g8fuGskKRPyyZeLUIC9eCCHzPL+ndCPXAlZ1AisiyvC5LFvVc3wb8PgDFp0+0i5xBS629c4Erj8Y0coTAhuGcRceDftyPp/PEq8zgfC2oPGZu+NzSUiIOJVSnmutN8axM0HAhrCKX+bM2ScFfcm0oh9XAGvD4qSh75uUpKCpEEJkripGq8QTIUxolVvvinPrJa1anOL6oxDiC3mce0qkbwM/6yE/+hACNS47EZgCKnQjtvTO7NSrFNB0mzJSWRr2oo/bUwjxLnHbHPNcrIGI91JK7c7XnQgCfunr4pUsBGKTwKb2WnSMRHvYNemoIUlGDGNE/JySaFMpdWuM+ai1fmCacddraUQshBBflsvlZ1j542/2mMJsI9a9bWWyWxtIiwastil4wluuBXguvG21gQA9uE0IuFW+kq/t2JAK6Pj8um67hBATcDS5QQucsNoIWuvKnZhs6Q5+3EyCWTjkkUa1MTUSrQ+4ak6q9M744bZCKXVt2zu57rKmISHiORG9mc/neVmWl9++fStwlem4sVDo0AjYB6JbNBYCTWm8KkSsffADsSP9D28rIaCUunAt/4g4I6IunquM/9/WrgYhxAWuktV22kqxcbvGLyGiN0S04d71WamDaAQ8gCms0kpt7D+a1HwmwVTyuQhmG4p98QfKsrxUSv1IWc247cw/bhNWAMAfRCSdFSVKOwVY21Y+xu75hejYmfd30/uIZaZebxkDhUoLrXUv6rZ/DRjAwyKlPOUYiXVfXW0XrKLb87JUGwWt0vjdIGKISLTOZm01bk+TroQQly5FPc/zAnguo5dWbpDEJK5VFBHvlVLjsizvmnzkjK8JQqBy3S6WNUdEY37Yv8Mq0ckYVqq6BoAfxhjdl0XHK+2Mr5cBABwdHWXGGNm0B/PBrLDOVnJELPy8A68BAUNhm7pd+w0R74wxH+29+c+FdhdolPU5ieemvWfNRsGq6RyHFTt1r4+Ic6XUp45CZAoAXwAgVCFpPaedbfcGU9UYc/P9+3f/+Wex620tCHg/VoFn6Mrz/MqjRFb+YGhVSryrW2chhJiy9T4DANm0r7bSEREhz3M9n8+3ymjpqIAVrIhAfwSEXBY61xgzQ8Sz2O/wTJ/+1EXjcajDElYCcAywqv23y1yOXqBRK5HIGHMphPgKbFk3xjy4HxFvHTLnlHWgkUOcsvTyTh+QMzY/OUlSElSnnxsi+oCIH7sY+2xUacTbkxHRVZ7n73hLXDV09c4Yc4mB7F926xQRAkFtJZDLYCPj9CBbA35Y/qpuP/C1Gpjn+c9Imy6QXd1OoXOVUtOB99Kh1N2ZlDLzXzDnmgs9IwDmKTStMky7ttmeJQCMQ0KQiKZ5nusOk6wv/KSYjUQi/uhmsd/Jy82IiDpE0wX+gJRS/0owIsbYhUlbS/74O9mLEvgRsokQx8lMvviCF2C9nS74367trSIn2W8AmdfPxnMYxFjIH1gV+s0as1itzEJt9gFqL0I5CEajUVBYGWMq589KCPF+NBq9jRmcpJSZUuo2z/Ofy+XykT+OCbQLT8l1IgbHtkQiF6EMVUR0GhAC7u8XAZtCZxwdHe2EXQiwUcW6gm6GyWgbrfWC7Wy1aF1rG1BK3cLz87PeiyLWpxBiY176GaeHLHlW29sh4kxrXTmq3kti6EkQq+NQu46T5NS2efv9+/eHb9++1Xz+LADuEfEnfxRZ6sCIaDp0ia+AarlVJqmQytsFvhaRgl0VOQFYFeHl1fqNEKKVQuwb6yxcQeczCvl7KljoXPCxhy7eC++51RKYDMYjMMY8+EY/Y8xNKpFkV0DEoffOQcHirfwAsJGuCmBlFa+1AXhWLVsIJJY5+BUAfo8ZY9l+UDR1lIJAmqxBtYEEZB3b7ZRU5IO3d5r/3baF1aHUbrzKA0CYUeh8T25IfOtWycs2HbTtDCYI2Gio4XnPsuA9TlKW41j3sCLOVNBcVmsBzxPgT0ei6m249REEGZL+Kskf91qyY6SIqUdrrvXLJKJPfgYbpVQsZmPQjDy+8Su2onVBX22Azy06Nu1dgq8PXCNvyza0oECtQztPiKMrAwzOBay+AcvO7Vwbgb1W7qGabWeXQUfjiHGsCRWv3H8JIfTT01PvHGywMlINFjbsIyT1/Unq7Btd/CmlfPAnQsCFaoXfJ7a2B1e4iHW6y6qUCt9Q2KvOYSizUgJSUptX/gHcQ4HUSCzGGhTIc+logmuWok/4gZVL3OYkSIpgpM3MYAtjzMxvM5ggYD971vP0tWdhqPHsAaGXvX7BblYjF0Q0FUIAOELKI550fhYtWZ8GRUCwVKl9hDIruWAC1SeMVPTFhNTxobyFIfvN0Ai9cwe1baEVAuik9Gt4r2OAtAhGfxuGq8SoNYE4BKEo4wirWHLKJhRuTMKvAieh5gYs3dYxjsaCPta0XO/j6ERYsYilr+JrDL36Ze4fxpgitQOPnONifd+c2DV0elIyj6enp0VivMjWaLF91HJyOu5G/96iWgUiPqREMHrbsCqWw6C3IGAB8IH3NVnq+Yh4/qsJAIvRaCQD+eUXAKDlc7WiLHb+crms7L+ZgdZL0rf4rAfLXsMrlDsxk+scMtFm4h9HJ/1bLH8h9EjmAWGNJbk4aAqabB/+lsARAjUBEeIPMBbGmM7PwRdMoW2JRbIgcOmTLdbtKNjaOet18isABbIxs6ReMK26SV1fAE9SWS9Q0mkV992RoWuE9oFbIPP+rlI7iLj91nt+P/23d25yMg82Xvv97GwbJZtrVm5km/JqY9QMh6H5BfCs1jPBzDXKVyF7miuYeH4WEEFnQZAoACrmFbwLSPjkWnavDZFVqyk3o3vuWir71tyuhBc+L4v9HtsH9sVoNMo8DahP3xP/AI/T5ZlkgTYPRFT0uB5AvSryzmwEbgISH5bFFwhj3sgJwG02XH0efmeCWeYeXC6XlkpfENGN1rrguWj7adUkWglFx8fHp3mePzLBZdrSvELE8/l8/ia24iPi5b7TkQ+JmFGUBWSjWwwRb9zIOt/N1CUdGWsRTe6pQXPZAdSNbKmuQ57cNRhjHpRS06bwcyI6RcSfeZ7/LaWcplwX6gJrJxpB2zshoqlS6jNb/TPnp7H/bDhKtQb2pvmkLh8TRHzM85zcuYiIH9u+OcE3UntASqlpnuc/uRjDpKkTCAgANoLVVs5feUsAsE7okAzeC1/bvyMGx6rD9aeB89ZgNXrXgja1/5jha84u5qxLH7jKrNOlrUXlH0g8vxPa3gmsXOn+t2Bpwa6nKSpQeEW3XIJzXOVx6ETq6rJNPOLcgBOuIvPAakvMWLEBRHwQQnwMlWnibYR/uNbuF0Qfg5M2xmyQP0IGISFEFeugQ70H616b9RhfGzLv71SyzpCCaecuwFQEfP5tsAlxK+94BuH7K9jmkXEtzAcAACnlrEmbsuDFa9bYxolCsoarSfM9rPdtb8qyfB8SAjFtABNLZyulLmJq5UshZh9oQBUyCEFHzoXdmnHg0bShabHDRCVbsRT53ocQBouUxDSRLcyg2lIfujTbiSr/+Gg0ykLtHTZq5lKTtdYLWpXKm7Vc75bHGYVgw13Xh1ux268xzJWj3/wPOGnvaoy5olW+gp+c2uvFwQ8zSzhlQQkhwW5QjFLqOmFrBoi42IXayxhCGFfbnt/DhRga96ALixAiVRuIZmCKeTWMMQ8892qJYLTWi7Isz1tiaWxRoGmsgWCp0li8AxFno9HobZMR0IJ9wbULdjFYuGDOdQUrTeUqz/N5m1TbNVI58mwcjAnZyj9gtwZO7rms67Vco5pS6npITWoIRh51yzy0gBXJ7A4Rb3gvfE5E+Xw+f5OawmyX7kLnGkkaYtNziLgNK631gsOIs4auW7VttrFMQ78dAawSZ0gpz5keaV96csos9m+HKJbJlmxOaPqWLa0AABIRH5VSdy9RCJUrDU26tsdVtuXoPWM9gw4sl8vPSqmix/bDxZgpq2cAkFyPsCOSn73W+kFKmXPVnik8z7MFIl4aY2rxF9sgEDYNAKtUc7C9duKido0GRNPmxdyGTvzKInYt3op3yrfBwmDhC9U1j0BrPZNSPgghThFxsVwudWrOPDYQhoJxevm1tdaVm3ARYJWcAhFPOUlqkdpnXyRSdqs2v+1yuawCFNiQdbkvsh1kZbLo9cGydqSllDewSqDyjoXCHwBQSSnXpBg3RySt8lIGtRJLpuH+K+d4yFg9eLwB28s6vTNEjEbABiIELX4ArFPsV/47DYT5F4hYq5PhjeOen/VaWx2MjN2QhHSriq1OSuwacOBKOG3gVGtZWztqyRbj9Pc37NYKPki1XD8J7Wg0ehsyEveFlHLCXpQ+8SpJGHrOJOTbaHwXsbllqfjyuSKyZSMW/G2stXiPrp1hvKAQwHM9jDuAgTIUNQiBPgaeDZRlOYtZRWmVx+56m/5TgIEsTIE2d101lRYDzxAYZI8shNjIoWBX4KGgtS7Ksryez+e/EVGOiOewO1fzoDUztdYV27MaDe5tNhI/hD1wHauFjZk0ZDkYNSHgjKvp2xsT0a3NZLW1ILB53wM/WcJEte012LMR7IeFwXTba3RBU25GRpVCn/Y/MNsHbJH9J9DX1hj6w2+C1lqXZTmbz+dvieg3TC8004ZsyM44M3LFbrxLiAiwtsUhMhc24G0tpHP8zhUCzjUfMFBAxoUx5gxgS0GglLqOhNsOJgQANqRucG/aRu0dEk0elqborhBYva7cY4j4ia9RBU5JAg1TMQiEEEPZLZLArrFLfvfFEH0S0emQHpWjoyN5cnIy4bHeWQFGRG8cIVa19fP09BScN264d1mW155Wat350fdcluVdE8+AiKZSyqy3IGhI3TyoELDQqzJksRvO9qUVaK11SOViV2GR2p/X14IrK9vQVEvEKRDx0rrTEPHcZkG2mZDtv0ej0Vt2ub0Z0Ji6waaMZWreFbTWBX9g1qW8FYYUbE9PT9quqhachbgSQnSu2K211oGtZy2RSVmW10T03rpVuxiDmzRqAABEfEw2FjrhopNAhzt37TUJoPl8vit3WQ0cjTlhq7Xe5p6tscwKgQGHOQh8gy12TJq5w/Fcb2lYHMSI6oznnud95R7n4raPAABE9FuXOeLMb0tGKwYaY9ToDpDoNWiwkO411ZiNj/CP79uL8L8Ez6q9V6EbguR6kj0FwtaVr1xYbdSf//y9/ARI87ScnJxMtszXGR2n62VwUHXeGnAOvg0hgIiXlvW154q85xBQdZiB+LhDqu3/LPbg4UgC78mveS8eNdKFgE6quCFgjCna7FROIpFWhOpdDAE2wv5GRG+EEO+ZvXlHRG87aQTsHrSSZIGrOn01VWifkFJOMJLksqsf/4A0SCmzo6OjbNut0K7Ac+IK4rEZGhG1MWbwUG2l1D0AfA2QfX4C1N17rw2tgsDJsvoAAF9eUz6BkL2Aqb2NsRMH/LPhbBvOYOV33/nC5WQf2jCU53lu6YKD2iWGRlQQ2PRRiPjltRqxANYBOhfAdoqhOesHHNAVvDD9acPOXY0AXoFdpQk1QcDS9IqILtgvPnuBcSVB9ih3fcABu0Ce53OANfnnT4eavZjP57+92MBaUEteioifiWiCu8t2MzgOQuCA1wIiesu1LkOVq14tQhqBhEAChAMOOKA7PMOlTU32qoXBAQccsCNIKbODO/uAAw444IADDjjggAMOOOCAAw444IADDvhl0MQsnAghstQOjTHrwo7Hx8enfrLIJuZfqH0TpdmGAsMqXn4Mz0Uvf/A4CgAApdRFKKMwk6caY9O7MhXb8iG4z8UHVzF6B6uALpuD4C9jzAMAjIUQE3f8be/GXqvL/W1DGXeef2PfTeM1xlT2PYXGa4wptNZV33wT7nNvG29LP+t50NaPd09N977uMzT3Y/dh0fZ+3XE0tS/LctYYa6CUuuCwxTWQy5x5mWX/cFJUrznVnMZsnVeNEY2zdlmN8FwhqPbxcDjlGax8tBsh0Jx9RrIP10Z8jefzefBe+Zr3fibaPiHNkVwJBUUq23BE52cAGI9Go3XVqEAyzxo9NRJ0VUsK4z1T9/5mQ/DvI3HumpzCLjyGqT+XIMC/5ySdc1jFCFy67zVyHw+c1Wk9x5y5UQv2iYTSLxDxRgihnXmdOc+/FkbMz9+v27hw36PX1r6rAhE/+QtMw/3dGWM+xt6TFxC4Bj//WsSoex2OwbjUWletQUd+dlUhxHtbe827gH3AlftyPb61O9AofTnP85+h/AZ8E7cObbMxkMMVZDFBALCZQILRmxfuZyZueF7ryWEz1Qba2GcKofH4eRliCUNY4MzdY0SUD0Vw8QVgLPDLz4bMH3pNU+NIvr9CgtgJ4gEAAM7EVPnt7LwLRf0FFrjoPLKxLKF8Ak6ci72f2H1fE9FZW86O0LcSuz/vvNqiEHu2zrile8/Jqcr8/P42/5vWuhqNRqEEilWkn/uGDMTBc1iSTe3fbZlhOV9b52SiA2Hj+fjPy8IrlZWF2ji5GrsiVpw0NIbBmKN+tV3OC5gFmn712tWKcnBF4Enf0u7uqPm8jAAABZNJREFUfGxIbee/oyrWT0uaL/95174NFmrQJWdHX+1Ma13485yIrkLvQEp5SkSnfu7NrbMYCyHWpaq/fftWxFIoE1EOHt+aEtKRcyk1V22qQtsLH4GEj68OTkKVif+bk7/w1YI/upl7jOtf+vBLemXHx8cbWzIhxAUi9o4g5a0WAKwWgpSs0ha8NbsFWBcaff/09JSkPTna3Nd9ZM3ia7hjHPslBnhMtxQoyruVIJBSSn9v3SDVgpVbuwqDQLHJzhPlNaYvM8b4VW8mnK/+0a8C/Stw1P0Pjogm7t9cluvUF8rGmA/eeR+MMa2pvUPgun4b1+24yq6fNdsoNj4gvULn+aaUuuBtyV7zdwSyX0/st8X39ZmIgvU4a9GHbTDGvFNKZbAZYtkJ/DDPlVILd3VnYfB7UwYX8kqp4XM5918SOlxvEgBgwtGfV0qpmTHmS9dsS0T0TikV+ul3CpfTGgxs2Z85c2Kj5BprCDdlWd7leX4Gz9uhiZQy4+cxAf7uul5XCPFBKfUDesxHCyKS7JUYU0OpsA79ZK4dhIg+cGmxWZ/+UsHv4MY13vIWYSaE+AAAX2IRxdtoBNbNlYyyLC8De5qpUuq+Iee8n/Ntp6Wx9gGt9Yxz7t1A/VmO2bL7qJS6CJ0fwAJWK4L/314iSQNawRXAWhtYu0D9d2+3EYh41Wb3CSBmF0nB2LHlbPOsJp4mNMaGCsS7AFcG23iGiDgnItmkGSdrBEKIL46b65Nvje6KsiyvWTNYW2+JaIqIEsIfuYbNYqhBQcDurAkA/O7/hohfX1u2JdaSrqWUd7GsvER0K6V8aBs3In5q8D50FSa9EdIKmCNxBgDryVmW5SzP83XZdyKa8HtrrQjkw3mfM6XUj4CLstPQrWeHV89o2u8mWK9NwDtyr5TK9rVFLcvymp+vxRgRG8umb2Uj4KIMM/dYSshlWZZ3bFx0pbCEcDFIX10MXocztU7594n9DxF1WZbXQwiBIUJLpZS+bWXh1P+rFfIQQky3ud6+4Ns+lsvlZ16NZu5xb9XKiOgeEXvZBixY4yjcY6nvSWu9EEJs3ENCZaT/43Gch6z4Q9fplFKO/XnkoPD+rpr62tprYAkJPLBYMdQoWD2OljNzrvMRNm8m4yQqQWC9qOSPlHE1ARHvt/0wEfFDbGJorYuAMPglEsXw/r5wDo0pUHotUEdywUzKreB6WJRSFxHvRSO+fftWGGPWY0bE5BT5IW/V0MJACHERMKL362vbDhzapcRwMVSLqFTVWmt2L1YNbdwyYACwMhSlj3g78IucDNEXG5Oy0G/sklt/GMaYLga0FLvJzmwso9HI/QCKmLrvfiiI+LGny3DjPlwacIDl2Rm2H6XULXSvKr1RaXkgYRB8T+xOb7o//7zG990oCHiSZu4xY8yZqypJKTOl1C2Gi6GCNXS1cd4d8kzV0EaTU1ySDYy3IdXNd2saY6L9Ms/fxYbqL6Ucn5ycTHjvF334rKFk7jFjzCTWHlZ7t3loYvCeeQort2vuf0w8Pn+C/hl6FiGB2Zdz3wVucdcm45+jFSy6EIhCPAv/PqSUkovz/oT45K/xGXzt0nnfQdsKE582+qFAgVUWBg9eu2AhnpCa79+fHVespgf3k4E3N4joLDQ3LKK0W6ZhRtUOa2X1jXZE9Mm6S2x6Z/ccY0xjxWDL/Wd+ddHS7hRWAUcZPHsx/g9WsQ9jZox9tYErgT4yRLyGgGGRx1sRURb6jYguXTdX0/Pi+77x2/PYF7DaI2cBhtuX0NillKdCiLOQwdS9Fj+jC+f+3PgQQMQfZVnuxIjIY/yzrUYit8tidFiLLvMx9Dzc+chaq/s8OsMl4UgpJbNcg88fET9Z46NS6o6I/vDb2baWktw2f2LGceYqrJ+dE4cT7Mefhxb/D23NYlcNbLWcAAAAAElFTkSuQmCC" alt="英语周报" style="height:28px;" class="mt-0.5 shrink-0">
                     <div>
-                        <h2 class="text-sm font-bold text-slate-800">英语周报双语阅读器</h2>
+                        <h2 class="text-sm font-bold text-slate-800">双语阅读本</h2>
                         <p class="text-[11px] text-slate-400">教师端</p>
                     </div>
                 </div>
@@ -554,10 +710,15 @@
                         </div>
                         <div class="border-t border-slate-100 pt-4">
                             <h4 class="text-sm font-semibold text-slate-700 mb-3">读后感</h4>
-                            <div class="p-4 bg-slate-50 rounded-lg">
-                                <div class="flex items-center justify-between mb-2">
+                            <div class="p-4 bg-slate-50 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors" onclick="switchNav('page-review', document.querySelectorAll('.sidebar-item')[0])">
+                                <div class="flex items-center justify-between mb-1">
                                     <span class="text-sm font-medium text-slate-700">《四世同堂》读后感</span>
+                                    <span class="status-tag status-done"><i class="fas fa-check-circle"></i> 已批改</span>
+                                </div>
+                                <p class="text-xs text-brand font-medium mb-2">第一章</p>
+                                <div class="flex items-center justify-between mb-2">
                                     <span class="text-xs text-slate-400">2025.05.20</span>
+                                    <span class="text-xs text-slate-400">批改时间：2025.05.21</span>
                                 </div>
                                 <p class="text-sm text-slate-600 leading-relaxed">读完《四世同堂》，我被祁家四代人的故事深深打动了。在抗战时期，北平沦陷的背景下，小羊圈胡同里的各色人物展现了人性的复杂与坚韧...</p>
                             </div>
@@ -1059,9 +1220,11 @@
                     </button>
                     <h1 class="text-2xl font-bold text-slate-800">批改读后感</h1>
                     <span class="text-sm text-slate-400">第 1 / 8 条</span>
+                    <span id="review-status-tag" class="status-tag status-done ml-auto"><i class="fas fa-check-circle"></i> 已批改</span>
                 </div>
                 <div class="max-w-3xl mx-auto">
-                    <div class="stat-card mb-4">
+                    <!-- 已批改状态 -->
+                    <div id="review-graded" class="stat-card mb-4">
                         <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
                             <div class="flex items-center gap-3">
                                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover">
@@ -1076,21 +1239,61 @@
                             </div>
                         </div>
                         <div class="p-4 bg-slate-50 rounded-lg mb-4">
-                            <h4 class="text-sm font-semibold text-slate-700 mb-2">《小王子》读后感</h4>
+                            <div class="flex items-center justify-between mb-1">
+                                <h4 class="text-sm font-semibold text-slate-700">《小王子》读后感</h4>
+                                <span class="text-xs text-slate-400">2026-06-01 20:00</span>
+                            </div>
+                            <p class="text-xs text-brand font-medium mb-2">第一章</p>
                             <p class="text-sm text-slate-600 leading-relaxed">读完《小王子》，我被这个来自B-612星球的小王子深深打动了。他与玫瑰的故事让我明白了爱与责任的意义。狐狸告诉他的秘密——"真正重要的东西，用眼睛是看不见的"，让我懂得了用心去感受生活中的美好。小王子在旅途中遇到的国王、商人、点灯人，都代表了成人世界的各种荒谬。这本书让我反思，成长的过程中，我们是否也失去了那份纯真和想象力？</p>
+                        </div>
+                        <div class="border-t border-slate-100 pt-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="form-label mb-0">教师评语</label>
+                                <span class="text-xs text-slate-400">批改时间：2026-06-02 10:15</span>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                                <p class="text-sm text-slate-600 leading-relaxed">小明同学读得很认真，能从人物性格中提炼出成长的道理，感悟深刻。建议在今后的阅读中多关注环境描写对人物心理的烘托作用。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 未批改状态（默认隐藏，通过切换展示） -->
+                    <div id="review-ungraded" class="stat-card mb-4" style="display:none;">
+                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 rounded-full object-cover">
+                                <div>
+                                    <p class="font-medium text-slate-800">李小明</p>
+                                    <p class="text-xs text-slate-400">五年级一班</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-medium text-slate-700">阅读《草房子》并写读后感</p>
+                                <p class="text-xs text-slate-400">书籍：草房子 · 提交时间：2025.06.10 09:15</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg mb-4">
+                            <div class="flex items-center justify-between mb-1">
+                                <h4 class="text-sm font-semibold text-slate-700">《草房子》读后感</h4>
+                                <span class="text-xs text-slate-400">2026-06-10 21:30</span>
+                            </div>
+                            <p class="text-xs text-brand font-medium mb-2">第三章</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">读完《草房子》，我被桑桑和他的朋友们的故事深深打动了。油麻地的草房子虽然简陋，但那里充满了童年的欢笑和泪水。桑桑的勇敢、纸月的善良、杜小康的坚强，都让我明白了成长的意义。成长路上会有挫折，但只要我们保持善良和勇气，就能像草房子一样，在风雨中屹立不倒。</p>
                         </div>
                         <div>
                             <label class="form-label">教师评语</label>
                             <textarea class="form-input" rows="4" placeholder="请输入评语..."></textarea>
                         </div>
                     </div>
-                    <div class="flex justify-between">
-                        <button class="btn-secondary btn-press" disabled><i class="fas fa-arrow-left mr-1"></i> 上一条</button>
-                        <div class="flex gap-3">
-                            <button onclick="showToast('已保存草稿')" class="btn-secondary btn-press">保存草稿</button>
-                            <button onclick="showToast('批改完成，已通知学生');switchNav('page-home', document.querySelectorAll('.sidebar-item')[0])" class="btn-primary btn-press">提交批改</button>
+                    <div class="flex justify-between items-center">
+                        <button id="btn-prev-review" onclick="goReviewPrev()" class="btn-secondary btn-press" disabled><i class="fas fa-arrow-left mr-1"></i> 上一条</button>
+                        <div class="flex gap-3 items-center">
+                            <span id="graded-action" class="text-sm text-slate-500 flex items-center"><i class="fas fa-check-circle text-success mr-2"></i>批改全文 · 2026-06-02 10:15</span>
+                            <div id="ungraded-action" style="display:none;" class="flex gap-3">
+                                <button onclick="showToast('已保存草稿')" class="btn-secondary btn-press">保存草稿</button>
+                                <button onclick="showToast('批改完成，已通知学生');switchNav('page-home', document.querySelectorAll('.sidebar-item')[0])" class="btn-primary btn-press">提交批改</button>
+                            </div>
                         </div>
-                        <button onclick="showToast('已切换到下一条')" class="btn-secondary btn-press">下一条 <i class="fas fa-arrow-right ml-1"></i></button>
+                        <button id="btn-next-review" onclick="goReviewNext()" class="btn-secondary btn-press">下一条 <i class="fas fa-arrow-right ml-1"></i></button>
                     </div>
                 </div>
             </div>
@@ -1296,11 +1499,126 @@
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
         }
+        function handleRegisterStep1() {
+            const phone = document.getElementById('reg-phone').value.trim();
+            const code = document.getElementById('reg-code').value.trim();
+            if (!phone) {
+                showToast('请输入手机号');
+                return;
+            }
+            if (!code) {
+                showToast('验证失败！请重新验证');
+                setTimeout(() => { document.getElementById('reg-code').value = ''; }, 3000);
+                return;
+            }
+            // 模拟验证成功
+            switchPage('page-register-step2');
+        }
+        function handleRegisterStep2() {
+            const pwd = document.getElementById('reg-pwd').value;
+            const pwd2 = document.getElementById('reg-pwd2').value;
+            if (!pwd || !pwd2) {
+                showToast('请填写密码');
+                return;
+            }
+            if (pwd !== pwd2) {
+                showToast('两次密码不一致');
+                return;
+            }
+            // 清空表单
+            document.getElementById('reg-phone').value = '';
+            document.getElementById('reg-code').value = '';
+            document.getElementById('reg-pwd').value = '';
+            document.getElementById('reg-pwd2').value = '';
+            document.getElementById('reg-school').value = '';
+            document.getElementById('reg-subject').value = '';
+            document.querySelectorAll('.reg-grade').forEach(cb => cb.checked = false);
+            // 返回登录页并显示注册成功
+            switchPage('page-login');
+            showRegisterSuccess();
+        }
+        function showRegisterSuccess() {
+            const banner = document.getElementById('register-success-banner');
+            if (banner) {
+                banner.classList.add('show');
+                setTimeout(() => banner.classList.remove('show'), 3000);
+            }
+        }
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2500);
+        }
+        let reviewIndex = 0;
+        const reviewData = [
+            { graded: true, name: '王小雨', book: '小王子', chapter: '第一章', task: '阅读《小王子》并写读后感', submitTime: '2025.06.08 14:32', reviewTime: '2026-06-01 20:00', gradeTime: '2026-06-02 10:15', comment: '小明同学读得很认真，能从人物性格中提炼出成长的道理，感悟深刻。建议在今后的阅读中多关注环境描写对人物心理的烘托作用。',
+                content: '读完《小王子》，我被这个来自B-612星球的小王子深深打动了。他与玫瑰的故事让我明白了爱与责任的意义。狐狸告诉他的秘密——"真正重要的东西，用眼睛是看不见的"，让我懂得了用心去感受生活中的美好。小王子在旅途中遇到的国王、商人、点灯人，都代表了成人世界的各种荒谬。这本书让我反思，成长的过程中，我们是否也失去了那份纯真和想象力？' },
+            { graded: false, name: '李小明', book: '草房子', chapter: '第三章', task: '阅读《草房子》并写读后感', submitTime: '2025.06.10 09:15', reviewTime: '2026-06-10 21:30', gradeTime: '', comment: '',
+                content: '读完《草房子》，我被桑桑和他的朋友们的故事深深打动了。油麻地的草房子虽然简陋，但那里充满了童年的欢笑和泪水。桑桑的勇敢、纸月的善良、杜小康的坚强，都让我明白了成长的意义。成长路上会有挫折，但只要我们保持善良和勇气，就能像草房子一样，在风雨中屹立不倒。' }
+        ];
+        function renderReview() {
+            const data = reviewData[reviewIndex];
+            const gradedEl = document.getElementById('review-graded');
+            const ungradedEl = document.getElementById('review-ungraded');
+            const statusTag = document.getElementById('review-status-tag');
+            const gradedAction = document.getElementById('graded-action');
+            const ungradedAction = document.getElementById('ungraded-action');
+            const counter = document.querySelector('#page-review .text-sm.text-slate-400');
+            const prevBtn = document.getElementById('btn-prev-review');
+            const nextBtn = document.getElementById('btn-next-review');
+            // 更新计数器
+            if (counter) counter.textContent = '第 ' + (reviewIndex + 1) + ' / ' + reviewData.length + ' 条';
+            // 更新按钮状态
+            if (prevBtn) prevBtn.disabled = reviewIndex === 0;
+            if (nextBtn) nextBtn.disabled = reviewIndex === reviewData.length - 1;
+            // 更新内容
+            if (data.graded) {
+                gradedEl.style.display = 'block';
+                ungradedEl.style.display = 'none';
+                statusTag.className = 'status-tag status-done ml-auto';
+                statusTag.innerHTML = '<i class="fas fa-check-circle"></i> 已批改';
+                gradedAction.style.display = 'flex';
+                ungradedAction.style.display = 'none';
+                // 更新已批改内容
+                gradedEl.querySelector('.font-medium.text-slate-800').textContent = data.name;
+                gradedEl.querySelector('.text-sm.font-medium.text-slate-700').textContent = data.task;
+                gradedEl.querySelector('.text-xs.text-slate-400:last-child').textContent = '书籍：' + data.book + ' · 提交时间：' + data.submitTime;
+                gradedEl.querySelector('h4.text-sm.font-semibold').textContent = '《' + data.book + '》读后感';
+                gradedEl.querySelector('.text-xs.text-slate-400').textContent = data.reviewTime;
+                gradedEl.querySelector('.text-xs.text-brand').textContent = data.chapter;
+                gradedEl.querySelector('.text-sm.text-slate-600.leading-relaxed').textContent = data.content;
+                gradedEl.querySelector('.text-xs.text-slate-400').textContent = '批改时间：' + data.gradeTime;
+                gradedEl.querySelector('.p-4.bg-slate-50.rounded-lg.border p.text-sm').textContent = data.comment;
+                gradedAction.innerHTML = '<i class="fas fa-check-circle text-success mr-2"></i>批改全文 · ' + data.gradeTime;
+            } else {
+                gradedEl.style.display = 'none';
+                ungradedEl.style.display = 'block';
+                statusTag.className = 'status-tag status-ongoing ml-auto';
+                statusTag.innerHTML = '<i class="fas fa-clock"></i> 待批改';
+                gradedAction.style.display = 'none';
+                ungradedAction.style.display = 'flex';
+                // 更新未批改内容
+                ungradedEl.querySelector('.font-medium.text-slate-800').textContent = data.name;
+                ungradedEl.querySelector('.text-sm.font-medium.text-slate-700').textContent = data.task;
+                ungradedEl.querySelector('.text-xs.text-slate-400:last-child').textContent = '书籍：' + data.book + ' · 提交时间：' + data.submitTime;
+                ungradedEl.querySelector('h4.text-sm.font-semibold').textContent = '《' + data.book + '》读后感';
+                ungradedEl.querySelector('.text-xs.text-slate-400').textContent = data.reviewTime;
+                ungradedEl.querySelector('.text-xs.text-brand').textContent = data.chapter;
+                ungradedEl.querySelector('.text-sm.text-slate-600.leading-relaxed').textContent = data.content;
+            }
+        }
+        function goReviewNext() {
+            if (reviewIndex < reviewData.length - 1) {
+                reviewIndex++;
+                renderReview();
+            }
+        }
+        function goReviewPrev() {
+            if (reviewIndex > 0) {
+                reviewIndex--;
+                renderReview();
+            }
         }
         function toggleBook(el) {
             el.classList.toggle('selected');
