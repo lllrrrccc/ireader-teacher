@@ -67,8 +67,8 @@
         .form-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
         .form-label { display: block; font-size: 13px; font-weight: 500; color: #334155; margin-bottom: 6px; }
         .form-group { margin-bottom: 16px; }
-        .toast { position: fixed; top: 20px; right: 20px; background: #1E293B; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; z-index: 100; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; }
-        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast { position: fixed; top: 50%; left: 50%; background: #1E293B; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; z-index: 100; opacity: 0; transform: translate(-50%, -10px); transition: all 0.3s; pointer-events: none; }
+        .toast.show { opacity: 1; transform: translate(-50%, -50%); }
         #register-success-banner.show { opacity: 1; pointer-events: auto; }
         .book-card-select { border: 2px solid #E2E8F0; border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.15s; }
         .book-card-select:hover { border-color: #CBD5E1; }
@@ -1426,8 +1426,10 @@
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            if (pageId !== 'page-login') {
+            if (pageId !== 'page-login' && !pageId.startsWith('page-register')) {
                 document.getElementById('page-layout').style.display = 'block';
+            } else {
+                document.getElementById('page-layout').style.display = 'none';
             }
         }
 
